@@ -1,9 +1,11 @@
-﻿using ToDoListAPI.Models;
+﻿using ToDoListAPI.DTOs;
+using ToDoListAPI.Models;
 
 namespace ToDoListAPI.Services;
 
 public interface ITaskService
 {
     List<TaskItem> GetAll();
-    void Create(TaskItem item);
+    TaskItem? GetById(int id);
+    CreateTaskResponse Create(CreateTaskRequest request);
 }

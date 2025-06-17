@@ -7,4 +7,5 @@ public class TaskItem
     public string Description { get; set; } = string.Empty;
     public StatusTask Status { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public TaskPriority Priority { get; set; } 
 }

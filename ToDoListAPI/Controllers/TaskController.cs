@@ -36,10 +36,34 @@ public class TaskController : ControllerBase
         {
             Title = request.Title,
             Description = request.Description,
-            Status = request.Status
+            Status = request.Status,
+            Priority = request.Priority,
         };
 
-        _taskService.Create(task);
-        return CreatedAtAction(nameof(GetAll), task);
+        var response = _taskService.Create(request);
+        return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
+
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var task = _taskService.GetById(id);
+        if (task == null)
+        {
+            return NotFound();
+        }
+
+        var response = new CreateTaskResponse
+        {
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description,
+            Status = task.Status.ToString(),
+            Priority = task.Priority.ToString()
+        };
+
+        return Ok(response);
+    }
+
 }

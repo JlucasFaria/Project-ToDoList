@@ -1,4 +1,5 @@
-﻿using ToDoListAPI.Models;
+﻿using ToDoListAPI.DTOs;
+using ToDoListAPI.Models;
 
 namespace ToDoListAPI.Services;
 
@@ -13,10 +14,31 @@ public class TaskService : ITaskService
         return _tasks;
     }
 
-    public void Create(TaskItem item)
+    public TaskItem? GetById(int id)
     {
-        item.Id = _currentId++;
-        _tasks.Add(item);
+        return _tasks.FirstOrDefault(t => t.Id == id);
     }
 
+    public CreateTaskResponse Create(CreateTaskRequest request)
+    {
+        var task = new TaskItem
+        {
+            Id = _currentId++,
+            Title = request.Title,
+            Description = request.Description,
+            Status = request.Status,
+            Priority = request.Priority
+        };
+
+        _tasks.Add(task);
+
+        return new CreateTaskResponse
+        {
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description,
+            Status = task.Status.ToString(),
+            Priority = task.Priority.ToString()
+        };
+    }
 }

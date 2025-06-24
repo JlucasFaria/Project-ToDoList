@@ -16,15 +16,8 @@ public class TaskController : ControllerBase
         _taskService = taskService;
     }
 
-    [HttpGet]
-    public IActionResult GetAll()
-    {
-        var task = _taskService.GetAll();
-        return Ok(task);
-    }
 
-
-    [HttpPost] 
+    [HttpPost]
     public IActionResult Create([FromBody] CreateTaskRequest request)
     {
         if (!ModelState.IsValid)
@@ -44,6 +37,12 @@ public class TaskController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var task = _taskService.GetAll();
+        return Ok(task);
+    }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
@@ -64,6 +63,28 @@ public class TaskController : ControllerBase
         };
 
         return Ok(response);
+    }
+
+    [HttpPut] 
+    public IActionResult Update(int id, [FromBody] UpdateTaskRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var update = _taskService.Update(id, request);
+        if (!update)
+            return NotFound();
+
+        return NoContent();
+    }
+    [HttpDelete]
+    public IActionResult Delete(int id)
+    {
+        var deleted = _taskService.Delete(id);
+        if (!deleted)
+            return NotFound();
+
+        return NoContent();
     }
 
 }

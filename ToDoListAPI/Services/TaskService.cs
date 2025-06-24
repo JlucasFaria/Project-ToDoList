@@ -41,4 +41,27 @@ public class TaskService : ITaskService
             Priority = task.Priority.ToString()
         };
     }
+
+    public bool Update(int id, UpdateTaskRequest request)
+    {
+        var task = _tasks.FirstOrDefault(t => t.Id == id);
+        if (task == null)
+            return false;
+
+        task.Title = request.Title;
+        task.Description = request.Description;
+        task.Status= request.Status;
+        task.Priority = request.Priority;
+
+        return true;
+    }
+    public bool Delete(int id)
+    {
+        var task = _tasks.FirstOrDefault(t => t.Id == id);
+        if (task == null)
+            return false;
+
+        _tasks.Remove(task);
+        return true;
+    }
 }
